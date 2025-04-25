@@ -12,10 +12,22 @@ int main() {
         tabuleiro[linhaHorizontal][colunaHorizontal + i] = 3;  
     }
 
-    // Posiciona o navio vertical (tamanho 3) na coluna H (índice 7) e nas linhas 6, 7 e 8 (índices 5, 6 e 7)
+    // Posiciona o navio vertical (tamanho 3) na coluna H e nas linhas 6, 7 e 8 
     int linhaVertical = 5, colunaVertical = 7; 
     for (int i = 0; i < 3; i++) {
         tabuleiro[linhaVertical + i][colunaVertical] = 3;  
+    }
+
+    // Posiciona o navio na diagonal principal na coluna A até C, nas linhas 6, 7 e 8
+    int linhaDiagonalPrincipal = 5;  
+    for (int i = 0; i < 3; i++) {
+        tabuleiro[linhaDiagonalPrincipal + i][i] = 3;  
+    }
+
+    // Posiciona o navio na diagonal secundária (tamanho 3) nas colunas J, I e H, e nas linhas 2, 3 e 4
+    int linhaDiagonalSecundaria = 1;  
+    for (int i = 0; i < 3; i++) {
+        tabuleiro[linhaDiagonalSecundaria + i][9 - i] = 3;  
     }
 
     printf("TABULEIRO BATALHA NAVAL\n");
