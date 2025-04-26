@@ -1,52 +1,116 @@
 #include <stdio.h>
 
-int main() {
-    char linha[10] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};  
+#define TAMANHO 10
 
-    // Criando tabuleiro matriz 10x10 e inicializando com 0 (água)
-    int tabuleiro[10][10] = {0}; // Inicializando todas as células com 0
-
-    // Posiciona o navio horizontal (tamanho 3) na linha 2, coluna 3
-    int linhaHorizontal = 2, colunaHorizontal = 3;
-    for (int i = 0; i < 3; i++) {
-        tabuleiro[linhaHorizontal][colunaHorizontal + i] = 3;  
+// Função para inicializar o tabuleiro com água (0)
+int inicializarTabuleiro(int tabuleiro[TAMANHO][TAMANHO]) {
+    for (int i = 0; i < TAMANHO; i++) {
+        for (int j = 0; j < TAMANHO; j++) {
+            tabuleiro[i][j] = 0;
+        }
     }
+    return 0;
+}
 
-    // Posiciona o navio vertical (tamanho 3) na coluna H e nas linhas 6, 7 e 8 
-    int linhaVertical = 5, colunaVertical = 7; 
-    for (int i = 0; i < 3; i++) {
-        tabuleiro[linhaVertical + i][colunaVertical] = 3;  
-    }
-
-    // Posiciona o navio na diagonal principal na coluna A até C, nas linhas 6, 7 e 8
-    int linhaDiagonalPrincipal = 5;  
-    for (int i = 0; i < 3; i++) {
-        tabuleiro[linhaDiagonalPrincipal + i][i] = 3;  
-    }
-
-    // Posiciona o navio na diagonal secundária (tamanho 3) nas colunas J, I e H, e nas linhas 2, 3 e 4
-    int linhaDiagonalSecundaria = 1;  
-    for (int i = 0; i < 3; i++) {
-        tabuleiro[linhaDiagonalSecundaria + i][9 - i] = 3;  
-    }
-
+// exibir o tabuleiro
+int exibirTabuleiro(int tabuleiro[TAMANHO][TAMANHO]) {
+    char linha[10] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
+    
     printf("TABULEIRO BATALHA NAVAL\n");
-
-    // Exibe as colunas (A-J) usando o vetor 'linha'
     printf("  ");
-    for (int i = 0; i < 10; i++) {
-        printf("%c ", linha[i]);  
-    }
+    for (int i = 0; i < TAMANHO; i++) printf("%c ", linha[i]);
     printf("\n");
-
-    // Exibe o tabuleiro com linhas numeradas de 1 a 10
-    for (int i = 0; i < 10; i++) {  // Loop para as 10 linhas
-        printf("%2d ", i + 1);  
-        for (int j = 0; j < 10; j++) {  
-            printf("%d ", tabuleiro[i][j]);  
+    
+    for (int i = 0; i < TAMANHO; i++) {
+        printf("%2d ", i + 1);
+        for (int j = 0; j < TAMANHO; j++) {
+            // Exibe os valores numéricos
+            printf("%d ", tabuleiro[i][j]);
         }
         printf("\n");
     }
+    return 0;
+}
 
+// Função Cruz (tamanho 5x5)
+int aplicarCruz(int tabuleiro[TAMANHO][TAMANHO]) {
+    int origemX = 0, origemY = 1; 
+    
+    // desenho cruz numero 3
+    for (int j = origemY; j < origemY + 5; j++) {
+        if (j >= 0 && j < TAMANHO) {
+            tabuleiro[origemX + 2][j] = 3; 
+        }
+    }
+    
+    
+    for (int i = origemX; i < origemX + 5; i++) {
+        if (i >= 0 && i < TAMANHO) {
+            tabuleiro[i][origemY + 2] = 3; 
+        }
+    }
+    
+    return 0;
+}
+
+// Função habilidade Cone
+int aplicarCone(int tabuleiro[TAMANHO][TAMANHO]) {
+    int origemX = 6, origemY = 2; 
+    
+    // Desenho do cone com o número 1
+    for (int i = 0; i < 3; i++) { 
+        for (int j = -i; j <= i; j++) { 
+            int x = origemX + i;
+            int y = origemY + j;
+            if (x >= 0 && x < TAMANHO && y >= 0 && y < TAMANHO) {
+                tabuleiro[x][y] = 1; 
+            }
+        }
+    }
+    
+    return 0;
+}
+
+// Função habilidade Octaedro
+int aplicarOctaedro(int tabuleiro[TAMANHO][TAMANHO]) {
+    int origemX = 4, origemY = 7; 
+    
+    // octaedro com o numero 2
+    int padrao[3][5] = {
+        {0, 0, 2, 0, 0},
+        {0, 2, 2, 2, 0},
+        {0, 0, 2, 0, 0}
+    };
+    
+    // Aplicando no tabuleiro
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 5; j++) {
+            int x = origemX + i - 1;
+            int y = origemY + j - 2;
+            if (x >= 0 && x < TAMANHO && y >= 0 && y < TAMANHO) {
+                tabuleiro[x][y] = padrao[i][j];
+            }
+        }
+    }
+    return 0;
+}
+
+int main() {
+    int tabuleiro[TAMANHO][TAMANHO];
+    
+    inicializarTabuleiro(tabuleiro);
+
+    // Aplicar habilidade Cruz 
+    aplicarCruz(tabuleiro);
+
+    // Aplicar habilidade Cone 
+    aplicarCone(tabuleiro);
+
+    // Aplicar habilidade Octaedro 
+    aplicarOctaedro(tabuleiro);
+
+    // Exibir tabuleiro 
+    exibirTabuleiro(tabuleiro);
+    
     return 0;
 }
